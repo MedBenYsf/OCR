@@ -7,9 +7,10 @@
       name="create"
       class="btn btn-primary"
     >Partager un post</button>
-    <div v-for="Post in Posts" :key="Post" class="postUnique">
-      <h1>{{Post.title}}</h1>
-      <p>{{Post.content}}</p>
+    <div class="postUnique">
+      <h1>{{post.userPseudo}}</h1>
+      <h1>{{post.title}}</h1>
+      <p>{{post.content}}</p>
     </div>
   </div>
 </template>
@@ -19,20 +20,19 @@ import axios from "axios";
 export default {
   data() {
     return {
-      id: ""
+      post: {}
     };
   },
   mounted() {
+    axios.defaults.headers["Authorization"] = "Bearer " + localStorage.getItem('authToken');
     axios
-      .get(
-        "http://localhost:7070/api/posts/" + encodeURIComponent(this.id),
-        this.Post
-      )
+      .get(`http://localhost:7070/api/posts/${this.$route.params.id}`)
       .then(response => {
-        this.Post = response.data;
+        console.log('response ===>', response.data)
+        this.post = response.data;
       })
-      .catch(function(err) {
-        console.log(err);
+      .catch(function(error) {
+        console.log(error);
       });
   },
   methods: {

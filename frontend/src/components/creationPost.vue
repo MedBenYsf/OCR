@@ -51,11 +51,13 @@ export default {
       post: {
         title: "",
         content: "",
+        userPseudo: localStorage.getItem('userPseudo')
       },
     };
   },
   methods: {
     create() {
+      axios.defaults.headers["Authorization"] = "Bearer " + localStorage.getItem('authToken');
       axios
         .post("http://localhost:7070/api/post", this.post)
         .then((response) => {

@@ -10,10 +10,10 @@
     <div class="content-post">
       <h1>Articles partagés par vos collègues</h1>
       <div class="posts">
-        <div v-for="Post in Posts" :key="Post" class="post" v-on:click="article()">
-          <h2>{{Post.title}}</h2>
+        <div v-for="Post in Posts" :key="Post" class="post" v-on:click="article(Post.id)">
+          <h3>{{Post.userPseudo}}</h3>
+          <h3>{{Post.title}}</h3>
           <p>{{Post.content}}</p>
-          <h7>{{Post.id}}</h7>
         </div>
       </div>
     </div>
@@ -29,6 +29,7 @@ export default {
     };
   },
   mounted() {
+    axios.defaults.headers["Authorization"] = "Bearer " + localStorage.getItem('authToken');
     axios
       .get("http://localhost:7070/api/posts", this.Posts)
       .then(response => {
@@ -43,13 +44,14 @@ export default {
   methods: {
     logOut() {
       delete axios.defaults.headers.common["Authorization"];
+      localStorage.clear();
       this.$router.push("/login");
     },
     redirection() {
       this.$router.push("/create");
     },
-    article() {
-      this.$router.push("/articleU");
+    article(postId) {
+      this.$router.push(`/post/${postId}`);
     }
   }
 };

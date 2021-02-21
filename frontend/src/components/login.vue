@@ -44,6 +44,8 @@ export default {
         .post("http://localhost:7070/login", this.login)
         .then(response => {
           let newToken = response.data.token;
+          localStorage.setItem('authToken', newToken);
+          localStorage.setItem('userPseudo', response.data.userPseudo);
           console.log(newToken);
           axios.defaults.headers["Authorization"] = "Bearer " + newToken;
           this.$router.push("/allPosts");
